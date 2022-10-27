@@ -28,3 +28,5 @@ I will finish my presentation during this time and compose a script and general 
 
 ## Emoji Chooser
 
+I preliminarily plan to use the following scheme for assigning emojis to trainers and pokemon:
+For Pokemon, I will keep track of how many Pokemon have been previously introduced into the game, and I will use an array containing the CLDR shortcodes of every emoji mentioned in the project spec (https://emojipedia.org/nature/) in combination with the Python emoji module. I will use the count of how many pokemon have been introduced as an index for the next available shortcode to be used with the module's emoji.emojize() command. 
