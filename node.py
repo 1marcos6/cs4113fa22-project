@@ -1,4 +1,3 @@
-from argparse import ArgumentParser
 import emoji
 import sys
 
@@ -11,4 +10,3 @@ def get_emoji(i,status):
         return animals[i+1]
  
 
- 

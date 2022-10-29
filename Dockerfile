@@ -18,6 +18,7 @@ ENV GRPC_PYTHON_VERSION 1.15.0
 RUN apt-get install -y libprotoc-dev protobuf-compiler
 
 RUN python3 -m pip install --upgrade pip && python3 -m pip install click grpcio grpcio-tools
+RUN python3 -m pip install emoji
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -30,7 +31,7 @@ COPY . /usr/src/app
 # Create the protobuf files
 # RUN protoc --python_out=. guessing_game.proto
 # Code below works similarly
-RUN python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. guessing_game.proto
+RUN python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. pokemon_ou.proto
 
 EXPOSE 22
 EXPOSE 80
