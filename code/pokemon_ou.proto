@@ -1,0 +1,20 @@
+service gameserver {
+    rpc Captured() returns (CapturedMessage){}
+    rpc Moves() returns (MovesRecord){}
+    rpc Board() returns (BoardRecord){}
+}
+
+service pokemon {
+   rpc CheckBoard() returns (PossibleMoves){}
+   rpc Move(MoveRequest) returns (MoveResponse){}
+   rpc Trainer(TrainerRequest) returns (TrainerResponse){}
+   rpc Path(PathRequest) returns (PathRecord){}
+}
+
+service trainer {
+   rpc CheckBoard() returns (PossibleMoves){}
+   rpc Move(MoveRequest) returns (MoveResponse){}
+   rpc Path(PathRequest) returns (PathRecord){}
+   rpc Pokedex(PokedexRequest) returns (PokedexResponse){}
+   rpc Capture(CaptureRequest) returns (CaptureResponse){}
+}
