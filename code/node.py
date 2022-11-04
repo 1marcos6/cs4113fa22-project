@@ -10,3 +10,6 @@ def get_emoji(i,status):
         return animals[i+1]
  
 
+
+
+
