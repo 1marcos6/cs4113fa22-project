@@ -3,22 +3,64 @@ syntax = "proto3";
 package pokemon_ou;
 
 service gameserver {
-    rpc Captured(Empty) returns (Message);
-    rpc Moves(Empty) returns (MoveList);
-    rpc Board(Empty) returns (Board);
-
+    rpc Captured(Empty) returns (CapturedMessage){}
+    rpc Moves(Empty) returns (MovesRecord){}
+    rpc Board(Empty) returns (BoardRecord){}
 }
+
+service pokemon {
+   rpc CheckBoard(Empty) returns (PossibleMoves){}
+   rpc Move(MoveRequest) returns (MoveResponse){}
+   rpc Trainer(Empty) returns (TrainerRecord){}
+   rpc Path(Empty) returns (PathRecord){}
+}
+
+service trainer {
+   rpc CheckBoard(Empty) returns (PossibleMoves){}
+   rpc Move(MoveRequest) returns (MoveResponse){}
+   rpc Capture(Empty) returns (CaptureResponse){}
+   rpc Path(Empty) returns (PathRecord){}
+   rpc Pokedex(Empty) returns (PokedexRecord){}
+} 
 
 message Empty {}
-
-message Message {
-    string message = 1;
+message CapturedMessage {
+    string status = 1;
 }
 
-message MoveList {
-    repeated Move moves = 1;
+message MovesRecord {
+    repeated string moves = 1;
 }
 
-message Board {
-    repeated Pokemon pokemon = 1;
+message BoardRecord {
+    repeated string board = 1;
 }
+
+message PossibleMoves {
+    repeated string moves = 1;
+}
+
+message MoveRequest {
+    repeated int32 move = 1;
+}
+
+message MoveResponse {
+    string status = 1;
+}
+
+message TrainerRecord {
+    string rec = 2;
+}
+
+message PathRecord {
+    repeated string path = 1;
+}
+
+message CaptureResponse {
+    string status = 1;
+}
+
+message PokedexRecord {
+    repeated string pokedex = 1;
+}
+
