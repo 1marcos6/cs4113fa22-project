@@ -1,15 +1,36 @@
-import emoji
+import socket
+import time
+import pokemon_ou_pb2
+import pokemon_ou_pb2_grpc
+import grpc
+import random
 import sys
 
-def get_emoji(i,status):
-    animals = [':dog:', ':cat:', ':mouse:', ':hamster:', ':rabbit:', ':wolf:', ':frog:', ':tiger:', ':koala:', ':bear:', ':pig:', ':pig_nose:', ':cow:', ':boar:', ':monkey_face:', ':monkey:', ':horse:', ':racehorse:', ':camel:', ':sheep:', ':elephant:', ':panda_face:', ':snake:', ':bird:', ':baby_chick:', ':hatched_chick:', ':hatching_chick:', ':chicken:', ':penguin:', ':turtle:', ':bug:', ':honeybee:', ':ant:', ':beetle:', ':snail:', ':octopus:', ':tropical_fish:', ':fish:', ':whale:', ':whale2:', ':dolphin:', ':cow2:', ':ram:', ':rat:', ':water_buffalo:', ':tiger2:', ':rabbit2:', ':dragon:', ':goat:', ':rooster:', ':dog2:', ':pig2:', ':mouse2:', ':ox:', ':dragon_face:', ':blowfish:', ':crocodile:', ':dromedary_camel:', ':leopard:', ':cat2:', ':poodle:', ':paw_prints:', ':bouquet:', ':cherry_blossom:', ':tulip:', ':four_leaf_clover:', ':rose:', ':sunflower:', ':hibiscus:', ':maple_leaf:', ':leaves:', ':fallen_leaf:', ':herb:', ':ear_of_rice:', ':mushroom:', ':cactus:', ':palm_tree:', ':evergreen_tree:', ':deciduous_tree:', ':chestnut:', ':seedling:', ':blossom:', ':globe_with_meridians:', ':sun_with_face:', ':full_moon_with_face:', ':new_moon_with_face:', ':new_moon:', ':waxing_crescent_moon:', ':first_quarter_moon:', ':waxing_gibbous_moon:', ':full_moon:', ':waning_gibbous_moon:', ':last_quarter_moon:', ':waning_crescent_moon:', ':last_quarter_moon_with_face:', ':first_quarter_moon_with_face:', ':moon:', ':earth_africa:', ':earth_americas:', ':earth_asia:', ':volcano:', ':milky_way:', ':partly_sunny:', ':octocat:', ':shipit:', ':squirrel:']
-    #TODO add CDFR people list
-    if status == 1:
-        return animals[i]
-    else:
-        return animals[i+1]
- 
+
+class pokemonserver(pokemon_ou_pb2_grpc.PokemonOuServicer):
+    def __init__(self, port):
+        self.port = port
+        self.board = {}
+        self.trainer = {}
+        self.moves = {}
+        self.path = {}
+        self.pokemon = {}
+        self.pokemon['pikachu'] = {'type': 'electric', 'hp': 35, 'attack': 55, 'defense': 40, 'special_attack': 50, 'special_defense': 50, 'speed': 90}
+        self.pokemon['bulbasaur'] = {'type': 'grass', 'hp': 45, 'attack': 49, 'defense': 49, 'special_attack': 65, 'special_defense': 65, 'speed': 45}
+        self.pokemon['charmander'] = {'type': 'fire', 'hp': 39, 'attack': 52, 'defense': 43, 'special_attack': 60, 'special_defense': 50, 'speed': 65}
+        self.pokemon['squirtle'] = {'type': 'water', 'hp': 44, 'attack': 48, 'defense': 65, 'special_attack': 50, 'special_defense': 64, 'speed': 43}
+        self.pokemon['caterpie'] = {'type': 'bug', 'hp': 45, 'attack': 30, 'defense': 35, 'special_attack': 20, 'special_defense': 20, 'speed': 45}
+        self.pokemon['weedle'] = {'type': 'bug', 'hp': 40, 'attack': 35, 'defense': 30, 'special_attack': 20, 'special_defense': 20, 'speed': 50}
+        self.pokemon['pidgey'] = {'type': 'normal', 'hp': 40, 'attack': 45, 'defense': 40, 'special_attack': 35, 'special_defense': 35, 'speed': 56}
+        self.pokemon['rattata'] = {'type': 'normal', 'hp': 30, 'attack': 56, 'defense': 35, 'special_attack': 25, 'special_defense': 35, 'speed': 72}
 
 
 
+def trainer(n):
+   .
 
+def pokemon(n):
+    .
+
+def server(n):
+    .
