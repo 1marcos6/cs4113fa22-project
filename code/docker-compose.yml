@@ -3,21 +3,21 @@ version: '3.7'
 services:
   trainer:
     build: .
-    hostname: ""
+    hostname: "Trainer"
     container_name: ""
     networks:
       - default
 
   pokemon:
     build: .
-    hostname: ""
+    hostname: "Pokemon"
     container_name: ""
     networks:
       - default
 
   server:
     build: .
-    hostname: ""
+    hostname: "Server"
     container_name: ""
     networks:
       - default

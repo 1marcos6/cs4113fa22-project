@@ -29,6 +29,11 @@ class gameserverStub(object):
                 request_serializer=pokemon__ou__pb2.Empty.SerializeToString,
                 response_deserializer=pokemon__ou__pb2.BoardRecord.FromString,
                 )
+        self.Connect = channel.unary_unary(
+                '/pokemon_ou.gameserver/Connect',
+                request_serializer=pokemon__ou__pb2.ConnectMessage.SerializeToString,
+                response_deserializer=pokemon__ou__pb2.ConnectMessage.FromString,
+                )
 
 
 class gameserverServicer(object):
@@ -52,6 +57,12 @@ class gameserverServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Connect(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_gameserverServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -69,6 +80,11 @@ def add_gameserverServicer_to_server(servicer, server):
                     servicer.Board,
                     request_deserializer=pokemon__ou__pb2.Empty.FromString,
                     response_serializer=pokemon__ou__pb2.BoardRecord.SerializeToString,
+            ),
+            'Connect': grpc.unary_unary_rpc_method_handler(
+                    servicer.Connect,
+                    request_deserializer=pokemon__ou__pb2.ConnectMessage.FromString,
+                    response_serializer=pokemon__ou__pb2.ConnectMessage.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -131,100 +147,8 @@ class gameserver(object):
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
-
-class pokemonStub(object):
-    """Missing associated documentation comment in .proto file."""
-
-    def __init__(self, channel):
-        """Constructor.
-
-        Args:
-            channel: A grpc.Channel.
-        """
-        self.CheckBoard = channel.unary_unary(
-                '/pokemon_ou.pokemon/CheckBoard',
-                request_serializer=pokemon__ou__pb2.Empty.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.PossibleMoves.FromString,
-                )
-        self.Move = channel.unary_unary(
-                '/pokemon_ou.pokemon/Move',
-                request_serializer=pokemon__ou__pb2.MoveRequest.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.MoveResponse.FromString,
-                )
-        self.Trainer = channel.unary_unary(
-                '/pokemon_ou.pokemon/Trainer',
-                request_serializer=pokemon__ou__pb2.Empty.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.TrainerRecord.FromString,
-                )
-        self.Path = channel.unary_unary(
-                '/pokemon_ou.pokemon/Path',
-                request_serializer=pokemon__ou__pb2.Empty.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.PathRecord.FromString,
-                )
-
-
-class pokemonServicer(object):
-    """Missing associated documentation comment in .proto file."""
-
-    def CheckBoard(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def Move(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def Trainer(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def Path(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-
-def add_pokemonServicer_to_server(servicer, server):
-    rpc_method_handlers = {
-            'CheckBoard': grpc.unary_unary_rpc_method_handler(
-                    servicer.CheckBoard,
-                    request_deserializer=pokemon__ou__pb2.Empty.FromString,
-                    response_serializer=pokemon__ou__pb2.PossibleMoves.SerializeToString,
-            ),
-            'Move': grpc.unary_unary_rpc_method_handler(
-                    servicer.Move,
-                    request_deserializer=pokemon__ou__pb2.MoveRequest.FromString,
-                    response_serializer=pokemon__ou__pb2.MoveResponse.SerializeToString,
-            ),
-            'Trainer': grpc.unary_unary_rpc_method_handler(
-                    servicer.Trainer,
-                    request_deserializer=pokemon__ou__pb2.Empty.FromString,
-                    response_serializer=pokemon__ou__pb2.TrainerRecord.SerializeToString,
-            ),
-            'Path': grpc.unary_unary_rpc_method_handler(
-                    servicer.Path,
-                    request_deserializer=pokemon__ou__pb2.Empty.FromString,
-                    response_serializer=pokemon__ou__pb2.PathRecord.SerializeToString,
-            ),
-    }
-    generic_handler = grpc.method_handlers_generic_handler(
-            'pokemon_ou.pokemon', rpc_method_handlers)
-    server.add_generic_rpc_handlers((generic_handler,))
-
-
- # This class is part of an EXPERIMENTAL API.
-class pokemon(object):
-    """Missing associated documentation comment in .proto file."""
-
     @staticmethod
-    def CheckBoard(request,
+    def Connect(request,
             target,
             options=(),
             channel_credentials=None,
@@ -234,252 +158,8 @@ class pokemon(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.pokemon/CheckBoard',
-            pokemon__ou__pb2.Empty.SerializeToString,
-            pokemon__ou__pb2.PossibleMoves.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def Move(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.pokemon/Move',
-            pokemon__ou__pb2.MoveRequest.SerializeToString,
-            pokemon__ou__pb2.MoveResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def Trainer(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.pokemon/Trainer',
-            pokemon__ou__pb2.Empty.SerializeToString,
-            pokemon__ou__pb2.TrainerRecord.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def Path(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.pokemon/Path',
-            pokemon__ou__pb2.Empty.SerializeToString,
-            pokemon__ou__pb2.PathRecord.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-
-class trainerStub(object):
-    """Missing associated documentation comment in .proto file."""
-
-    def __init__(self, channel):
-        """Constructor.
-
-        Args:
-            channel: A grpc.Channel.
-        """
-        self.CheckBoard = channel.unary_unary(
-                '/pokemon_ou.trainer/CheckBoard',
-                request_serializer=pokemon__ou__pb2.Empty.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.PossibleMoves.FromString,
-                )
-        self.Move = channel.unary_unary(
-                '/pokemon_ou.trainer/Move',
-                request_serializer=pokemon__ou__pb2.MoveRequest.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.MoveResponse.FromString,
-                )
-        self.Capture = channel.unary_unary(
-                '/pokemon_ou.trainer/Capture',
-                request_serializer=pokemon__ou__pb2.Empty.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.CaptureResponse.FromString,
-                )
-        self.Path = channel.unary_unary(
-                '/pokemon_ou.trainer/Path',
-                request_serializer=pokemon__ou__pb2.Empty.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.PathRecord.FromString,
-                )
-        self.Pokedex = channel.unary_unary(
-                '/pokemon_ou.trainer/Pokedex',
-                request_serializer=pokemon__ou__pb2.Empty.SerializeToString,
-                response_deserializer=pokemon__ou__pb2.PokedexRecord.FromString,
-                )
-
-
-class trainerServicer(object):
-    """Missing associated documentation comment in .proto file."""
-
-    def CheckBoard(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def Move(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def Capture(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def Path(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def Pokedex(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-
-def add_trainerServicer_to_server(servicer, server):
-    rpc_method_handlers = {
-            'CheckBoard': grpc.unary_unary_rpc_method_handler(
-                    servicer.CheckBoard,
-                    request_deserializer=pokemon__ou__pb2.Empty.FromString,
-                    response_serializer=pokemon__ou__pb2.PossibleMoves.SerializeToString,
-            ),
-            'Move': grpc.unary_unary_rpc_method_handler(
-                    servicer.Move,
-                    request_deserializer=pokemon__ou__pb2.MoveRequest.FromString,
-                    response_serializer=pokemon__ou__pb2.MoveResponse.SerializeToString,
-            ),
-            'Capture': grpc.unary_unary_rpc_method_handler(
-                    servicer.Capture,
-                    request_deserializer=pokemon__ou__pb2.Empty.FromString,
-                    response_serializer=pokemon__ou__pb2.CaptureResponse.SerializeToString,
-            ),
-            'Path': grpc.unary_unary_rpc_method_handler(
-                    servicer.Path,
-                    request_deserializer=pokemon__ou__pb2.Empty.FromString,
-                    response_serializer=pokemon__ou__pb2.PathRecord.SerializeToString,
-            ),
-            'Pokedex': grpc.unary_unary_rpc_method_handler(
-                    servicer.Pokedex,
-                    request_deserializer=pokemon__ou__pb2.Empty.FromString,
-                    response_serializer=pokemon__ou__pb2.PokedexRecord.SerializeToString,
-            ),
-    }
-    generic_handler = grpc.method_handlers_generic_handler(
-            'pokemon_ou.trainer', rpc_method_handlers)
-    server.add_generic_rpc_handlers((generic_handler,))
-
-
- # This class is part of an EXPERIMENTAL API.
-class trainer(object):
-    """Missing associated documentation comment in .proto file."""
-
-    @staticmethod
-    def CheckBoard(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.trainer/CheckBoard',
-            pokemon__ou__pb2.Empty.SerializeToString,
-            pokemon__ou__pb2.PossibleMoves.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def Move(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.trainer/Move',
-            pokemon__ou__pb2.MoveRequest.SerializeToString,
-            pokemon__ou__pb2.MoveResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def Capture(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.trainer/Capture',
-            pokemon__ou__pb2.Empty.SerializeToString,
-            pokemon__ou__pb2.CaptureResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def Path(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.trainer/Path',
-            pokemon__ou__pb2.Empty.SerializeToString,
-            pokemon__ou__pb2.PathRecord.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def Pokedex(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.trainer/Pokedex',
-            pokemon__ou__pb2.Empty.SerializeToString,
-            pokemon__ou__pb2.PokedexRecord.FromString,
+        return grpc.experimental.unary_unary(request, target, '/pokemon_ou.gameserver/Connect',
+            pokemon__ou__pb2.ConnectMessage.SerializeToString,
+            pokemon__ou__pb2.ConnectMessage.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -6,22 +6,11 @@ service gameserver {
     rpc Captured(Empty) returns (CapturedMessage){}
     rpc Moves(Empty) returns (MovesRecord){}
     rpc Board(Empty) returns (BoardRecord){}
+    rpc Connect(ConnectMessage) returns (ConnectMessage){}
+    rpc MoveRequest(MoveRequestMessage) returns (Feedback){}
 }
 
-service pokemon {
-   rpc CheckBoard(Empty) returns (PossibleMoves){}
-   rpc Move(MoveRequest) returns (MoveResponse){}
-   rpc Trainer(Empty) returns (TrainerRecord){}
-   rpc Path(Empty) returns (PathRecord){}
-}
 
-service trainer {
-   rpc CheckBoard(Empty) returns (PossibleMoves){}
-   rpc Move(MoveRequest) returns (MoveResponse){}
-   rpc Capture(Empty) returns (CaptureResponse){}
-   rpc Path(Empty) returns (PathRecord){}
-   rpc Pokedex(Empty) returns (PokedexRecord){}
-} 
 
 message Empty {}
 message CapturedMessage {
@@ -36,31 +25,12 @@ message BoardRecord {
     repeated string board = 1;
 }
 
-message PossibleMoves {
-    repeated string moves = 1;
+message ConnectMessage {
+    string type = 1;
 }
-
-message MoveRequest {
-    repeated int32 move = 1;
+message MoveRequestMessage {
+    string move = 1;
 }
-
-message MoveResponse {
+message Feedback {
     string status = 1;
 }
-
-message TrainerRecord {
-    string rec = 2;
-}
-
-message PathRecord {
-    repeated string path = 1;
-}
-
-message CaptureResponse {
-    string status = 1;
-}
-
-message PokedexRecord {
-    repeated string pokedex = 1;
-}
-
