@@ -5,9 +5,10 @@ package pokemon_ou;
 service gameserver {
     rpc Captured(Empty) returns (CapturedMessage){}
     rpc Moves(Empty) returns (MovesRecord){}
-    rpc Board(Empty) returns (BoardRecord){}
+    rpc Board(Empty) returns (Empty){}
     rpc Connect(ConnectMessage) returns (ConnectMessage){}
     rpc MoveRequest(MoveRequestMessage) returns (Feedback){}
+    rpc BoardCheck(CurrentLocation) returns (PossibleMoves){}
 }
 
 
@@ -21,10 +22,6 @@ message MovesRecord {
     repeated string moves = 1;
 }
 
-message BoardRecord {
-    repeated string board = 1;
-}
-
 message ConnectMessage {
     string type = 1;
 }
@@ -33,4 +30,10 @@ message MoveRequestMessage {
 }
 message Feedback {
     string status = 1;
+}
+message CurrentLocation {
+    int32 location = 1;
+}
+message PossibleMoves {
+    repeated int32 moves = 1;
 }

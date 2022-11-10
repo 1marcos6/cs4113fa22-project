@@ -10,15 +10,21 @@ import sys
 from Pokemon import Pokemon
 from Trainer import Trainer
 
-n = 0
+class space:
+    def __init__(self):
+        self.occupied = False
+        self.pokemon = [] 
+        self.trainer = None
+
 class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
     def __init__(self):
         self.animals = ['🐕', '🐈', '🐁', '🐹', '🐰', '🐺', '🐸', '🐯', '🐨', '🐻', '🐷', '🐽', '🐮', '🐗', '🐵', '🐒', '🐴', '🐎', '🐫', '🐑', '🐘', '🐼', '🐍', '🐦', '🐤', '🐥', '🐣', '🐔', '🐧', '🐢', '🐛', '🐝', '🐜', '🐞', '🐌', '🐙', '🐠', '🐟', '🐳', '🐋', '🐬', '🐄', '🐏', '🐀', '🐃', '🐅', '🐇', '🐉', '🐐', '🐓', '🐕', '🐖', '🐁', '🐂', '🐲', '🐡', '🐡', '🐊', '🐪', '🐆', '🐈', '🐩', '🐾', '💐', '🌸', '🌷', '🍀', '🌹', '🌻', '🌺', '🌿', '🌾', '🍄', '🌵', '🌴', '🌲', '🌳', '🌰', '🌱', '🌼', '🌐', '🌞', '🌝', '🌚', '🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘', '🌙', '🌜', '🌛', '🌔', '🌍', '🌎', '🌏', '🌋', '🌌', ' ⛅️', '🐙', '🚢', '🐿']
         self.people = ["😀","😃","😄","😁","😆","😅","😂","🤣","☺️","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","💀","☠️","👻","👽","👾","🤖","💩","😺","😸","😹","😻","😼","😽","🙀","😿","😾"]
         self.pokecount = 0
         self.peoplecount = 0
-        self.board = [0] * (n*n)
-
+        self.board = [] * (n*n)
+        for i in range(n*n):
+            self.board.append(space())
     def Captured(self, request, context):
         print('Captured')
         return pokemon_ou_pb2.CapturedMessage()
@@ -28,8 +34,25 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         return pokemon_ou_pb2.MovesRecord()
 
     def Board(self, request, context):
-        print('Board')
-        return pokemon_ou_pb2.BoardRecord()
+        output = ""
+
+        for i in range(n*n):
+            if((i+1)%n == 0):
+                if((i+1) == n*n):
+                    break
+                output+='\n'
+
+            else:
+                if(self.board[i].trainer!=None):
+                    output+=self.board[i].trainer
+                else:
+                    if(len(self.board[i].pokemon) ==0):
+                        output+="⬜️"
+                    else:
+                        output+=self.board[i].pokemon[0]
+        print(output)
+        return pokemon_ou_pb2.Empty()
+
 
     def Connect(self, request, context):
         if(request.type == 'poke'):
@@ -45,12 +68,9 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         print('MoveRequest')
         return pokemon_ou_pb2.MoveRequestMessage()
     
-        
-    
 
 
-
-def server(n):
+def server():
     server = grpc.server(concurrent.futures.ThreadPoolExecutor(max_workers=10))
     pokemon_ou_pb2_grpc.add_gameserverServicer_to_server(gameserver(), server)
     server.add_insecure_port('[::]:50051')
@@ -62,34 +82,16 @@ def server(n):
             break
     except KeyboardInterrupt:
         server.stop(0)
-
-def train():
-    with grpc.insecure_channel('server:50051') as channel:  
-        stub = pokemon_ou_pb2_grpc.gameserverStub(channel)
-        name = stub.Connect(pokemon_ou_pb2.ConnectMessage(type = 'train')).type
-        trainer = Trainer()
-        trainer.setName(name)
-
-    
-
-def poke():  
-    with grpc.insecure_channel('server:50051') as channel:  
-        stub = pokemon_ou_pb2_grpc.gameserverStub(channel)
-        name = stub.Connect(pokemon_ou_pb2.ConnectMessage(type = 'poke')).type
-        pokefella = Pokemon()
-        pokefella.setName(name)
-    
-
         
 
 if __name__== '__main__':
     curr = socket.gethostname()
     if curr == "Server":
         n = int(sys.argv[1])
-        server(n)
+        server()
     elif curr[0:7] == "Trainer":
         time.sleep(4)
-        train()
+        train = Trainer()
     elif curr[0:7] == "Pokemon":
         time.sleep(4)
-        poke()
+        poke = Pokemon()
