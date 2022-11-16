@@ -9,6 +9,8 @@ import concurrent.futures
 import sys
 from Pokemon import Pokemon
 from Trainer import Trainer
+import threading
+
 
 class space:
     def __init__(self):
@@ -23,8 +25,11 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         self.pokecount = 0
         self.peoplecount = 0
         self.board = [] * (n*n)
+        self.boardLocks = [] * (n*n)
         for i in range(n*n):
             self.board.append(space())
+        for i in range(n*n):
+            self.boardLocks.append(threading.Lock())
     def Captured(self, request, context):
         print('Captured')
         return pokemon_ou_pb2.CapturedMessage()
@@ -64,28 +69,44 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
             self.pokecount += 1
             name = self.animals[self.pokecount-1]
             x = random.randint(0,(n*n)-1)
-            while(self.board[x].trainer!=None and len(self.board[x].pokemon)>0):
-                x = random.randint(0,(n*n)-1)
-                time.sleep(random.randint(0,2))
-            while(self.board[x].trainer!=None and len(self.board[x].pokemon)>0):
-                x = random.randint(0,(n*n)-1)
-                time.sleep(random.randint(0,2))
-            self.board[x].pokemon.append(name)
+            #lock the space in board array and add pokemon to it
+            self.boardLocks[x].acquire()
+            if(self.board[x].trainer == None and len(self.board[x].pokemon) == 0):
+                self.board[x].pokemon.append(name)
+            else:
+                self.boardLocks[x].release()
+                while(self.board[x].trainer != None or len(self.board[x].pokemon) != 0):
+                    x = random.randint(0,(n*n)-1)
+                    self.boardLocks[x].acquire()
+                    if(self.board[x].trainer == None and len(self.board[x].pokemon) == 0):
+                        self.board[x].pokemon.append(name)
+                        break
+                    else:
+                        self.boardLocks[x].release()
+            self.boardLocks[x].release()
             return pokemon_ou_pb2.ConnectResponse(status = name, pos = x)
         else:
             time.sleep(.5)
             self.peoplecount += 1
             name = self.people[self.peoplecount-1]
             x = random.randint(0,(n*n)-1)
-            while(self.board[x].trainer!=None and len(self.board[x].pokemon)>0):
-                x = random.randint(0,(n*n)-1)
-                time.sleep(random.randint(0,2))
-            while(self.board[x].trainer!=None and len(self.board[x].pokemon)>0):
-                x = random.randint(0,(n*n)-1)
-                time.sleep(random.randint(0,2))
-            self.board[x].trainer = name
+            self.boardLocks[x].acquire()
+            if(self.board[x].trainer == None and len(self.board[x].pokemon) == 0):
+                self.board[x].trainer = name
+            else:
+                self.boardLocks[x].release()
+                while(self.board[x].trainer != None or len(self.board[x].pokemon) != 0):
+                    x = random.randint(0,(n*n)-1)
+                    self.boardLocks[x].acquire()
+                    if(self.board[x].trainer == None and len(self.board[x].pokemon) == 0):
+                        self.board[x].trainer = name
+                        break
+                    else:
+                        self.boardLocks[x].release()
+            self.boardLocks[x].release()
             return pokemon_ou_pb2.ConnectResponse(status = name, pos = x)
 
+            
     def MoveRequest(self, request, context):
         print('MoveRequest')
         return pokemon_ou_pb2.MoveRequestMessage()
