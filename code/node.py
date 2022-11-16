@@ -34,35 +34,57 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         return pokemon_ou_pb2.MovesRecord()
 
     def Board(self, request, context):
-        output = ""
+        output = "\n"
 
         for i in range(n*n):
-            if((i+1)%n == 0):
-                if((i+1) == n*n):
-                    break
-                output+='\n'
-
+            if((i+1)%n==0):
+                if(self.board[i].trainer!=None):
+                    output += self.board[i].trainer
+                elif(len(self.board[i].pokemon)>0):
+                    output += self.board[i].pokemon[0]
+                else:
+                    output += "⬜"
+                output += "\n"
             else:
                 if(self.board[i].trainer!=None):
-                    output+=self.board[i].trainer
+                    output += self.board[i].trainer
+                elif(len(self.board[i].pokemon)>0):
+                    output += self.board[i].pokemon[0]
                 else:
-                    if(len(self.board[i].pokemon) ==0):
-                        output+="⬜️"
-                    else:
-                        output+=self.board[i].pokemon[0]
+                    output += "⬜"
+
+        output+="\n"
         print(output)
         return pokemon_ou_pb2.Empty()
 
 
     def Connect(self, request, context):
         if(request.type == 'poke'):
+            time.sleep(1)
             self.pokecount += 1
             name = self.animals[self.pokecount-1]
-            return pokemon_ou_pb2.ConnectMessage(type = name)
+            x = random.randint(0,(n*n)-1)
+            while(self.board[x].trainer!=None and len(self.board[x].pokemon)>0):
+                x = random.randint(0,(n*n)-1)
+                time.sleep(random.randint(0,2))
+            while(self.board[x].trainer!=None and len(self.board[x].pokemon)>0):
+                x = random.randint(0,(n*n)-1)
+                time.sleep(random.randint(0,2))
+            self.board[x].pokemon.append(name)
+            return pokemon_ou_pb2.ConnectResponse(status = name, pos = x)
         else:
+            time.sleep(.5)
             self.peoplecount += 1
             name = self.people[self.peoplecount-1]
-            return pokemon_ou_pb2.ConnectMessage(type = name)
+            x = random.randint(0,(n*n)-1)
+            while(self.board[x].trainer!=None and len(self.board[x].pokemon)>0):
+                x = random.randint(0,(n*n)-1)
+                time.sleep(random.randint(0,2))
+            while(self.board[x].trainer!=None and len(self.board[x].pokemon)>0):
+                x = random.randint(0,(n*n)-1)
+                time.sleep(random.randint(0,2))
+            self.board[x].trainer = name
+            return pokemon_ou_pb2.ConnectResponse(status = name, pos = x)
 
     def MoveRequest(self, request, context):
         print('MoveRequest')

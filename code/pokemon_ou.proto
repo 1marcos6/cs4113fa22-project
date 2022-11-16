@@ -6,7 +6,7 @@ service gameserver {
     rpc Captured(Empty) returns (CapturedMessage){}
     rpc Moves(Empty) returns (MovesRecord){}
     rpc Board(Empty) returns (Empty){}
-    rpc Connect(ConnectMessage) returns (ConnectMessage){}
+    rpc Connect(ConnectMessage) returns (ConnectResponse){}
     rpc MoveRequest(MoveRequestMessage) returns (Feedback){}
     rpc BoardCheck(CurrentLocation) returns (PossibleMoves){}
 }
@@ -36,4 +36,8 @@ message CurrentLocation {
 }
 message PossibleMoves {
     repeated int32 moves = 1;
+}
+message ConnectResponse {
+    string status = 1;
+    int32 pos = 2;
 }
