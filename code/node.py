@@ -106,7 +106,7 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
             self.boardLocks[x].release()
             return pokemon_ou_pb2.ConnectResponse(status = name, pos = x)
 
-            
+
     def MoveRequest(self, request, context):
         print('MoveRequest')
         return pokemon_ou_pb2.MoveRequestMessage()
@@ -121,7 +121,8 @@ def server():
     print('Server started')
     try:
         while True:
-            time.sleep(20)
+            # run until all clients disconnect
+            time.sleep(100)
             break
     except KeyboardInterrupt:
         server.stop(0)

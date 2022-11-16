@@ -17,7 +17,7 @@ class Pokemon:
             res = stub.Connect(pokemon_ou_pb2.ConnectMessage(type = 'poke'))
             self.name = res.status
             self.path.append(res.pos)
-            print("Pokemon: " + self.name + " is at ", self.path[0])
+            #print("Pokemon: " + self.name + " is at ", self.path[0])
             stub.Board(pokemon_ou_pb2.Empty())
             caught = 0
             while(caught!=1):
