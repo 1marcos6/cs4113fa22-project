@@ -18,7 +18,7 @@ class Pokemon:
             self.name = res.status
             self.path.append(res.pos)
             #print("Pokemon: " + self.name + " is at ", self.path[0])
-            stub.Board(pokemon_ou_pb2.Empty())
+           # stub.Board(pokemon_ou_pb2.Empty())
             caught = 0
             while(caught!=1):
-               break
+               dog = 1

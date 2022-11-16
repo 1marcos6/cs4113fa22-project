@@ -23,7 +23,7 @@ class Trainer:
             self.name = res.status
             self.path.append(res.pos)
             #print("Trainer: " + self.name + " is at ", self.path[0])
-            stub.Board(pokemon_ou_pb2.Empty())
+           # stub.Board(pokemon_ou_pb2.Empty())
             gameOver = 0
             while gameOver ==0:
-                break
+                dog = 2

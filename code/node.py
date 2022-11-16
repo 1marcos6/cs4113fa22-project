@@ -39,37 +39,16 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         return pokemon_ou_pb2.MovesRecord()
 
     def Board(self, request, context):
-        output = "\n"
-
-        for i in range(n*n):
-            if((i+1)%n==0):
-                if(self.board[i].trainer!=None):
-                    output += self.board[i].trainer
-                elif(len(self.board[i].pokemon)>0):
-                    output += self.board[i].pokemon[0]
-                else:
-                    output += "⬜"
-                output += "\n"
-            else:
-                if(self.board[i].trainer!=None):
-                    output += self.board[i].trainer
-                elif(len(self.board[i].pokemon)>0):
-                    output += self.board[i].pokemon[0]
-                else:
-                    output += "⬜"
-
-        output+="\n"
-        print(output)
+        self.print()  
         return pokemon_ou_pb2.Empty()
 
 
     def Connect(self, request, context):
         if(request.type == 'poke'):
-            time.sleep(1)
+            #time.sleep(1)
             self.pokecount += 1
             name = self.animals[self.pokecount-1]
             x = random.randint(0,(n*n)-1)
-            #lock the space in board array and add pokemon to it
             self.boardLocks[x].acquire()
             if(self.board[x].trainer == None and len(self.board[x].pokemon) == 0):
                 self.board[x].pokemon.append(name)
@@ -110,20 +89,47 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
     def MoveRequest(self, request, context):
         print('MoveRequest')
         return pokemon_ou_pb2.MoveRequestMessage()
+
+    def print(self):
+        output = ""
+
+        for i in range(n*n):
+            if((i+1)%n==0):
+                if(self.board[i].trainer!=None):
+                    output += self.board[i].trainer
+                elif(len(self.board[i].pokemon)>0):
+                    output += self.board[i].pokemon[0]
+                else:
+                    output += "⬜"
+                output += "\n"
+            else:
+                if(self.board[i].trainer!=None):
+                    output += self.board[i].trainer
+                elif(len(self.board[i].pokemon)>0):
+                    output += self.board[i].pokemon[0]
+                else:
+                    output += "⬜"
+
+        output+='\n'
+        print(output)
     
 
 
 def server():
     server = grpc.server(concurrent.futures.ThreadPoolExecutor(max_workers=10))
-    pokemon_ou_pb2_grpc.add_gameserverServicer_to_server(gameserver(), server)
+    servicer = gameserver()
+    pokemon_ou_pb2_grpc.add_gameserverServicer_to_server(servicer, server)
     server.add_insecure_port('[::]:50051')
     server.start()
     print('Server started')
     try:
+        #print('\n')
+        print('\033[H\033[J')
+        print('\033[H\033[J')
+
         while True:
-            # run until all clients disconnect
-            time.sleep(100)
-            break
+            print('\033[H')
+            servicer.print()
     except KeyboardInterrupt:
         server.stop(0)
         
