@@ -53,3 +53,17 @@ CheckBoard() will take an empty message and return a list of all possible moves
 Move() will take a message that contains the direction of the move and return a message that indicates to the Pokemon that it has moved
 Path() will take an empty message and return a list of all moves that have been executed
 Trainer() will take an empty message and return a message that explains the information about past capture and about the trainer holding it
+
+
+## First Version
+
+### Compile
+![Gif](./media/COmpile.gif)
+
+The program is compiled by passing the amount of trainers and pokemon as arguments to the docker compose command. The program is then compiled and the trainers and pokemon are initialized and given emojis in the next gif.
+
+### Board Initialization
+
+![Gif](./media/New.gif)
+
+The program is now compiled and nodes begin to request connection and are assigned a name and a spot on the board if successful. Due to temporary timing delays the complete board assignment takes about 10-15 seconds but when the project is complete I will remove these delays. To avoid board conflicts, I use locks to ensure that an assignment can take place without another assignment at the same spot occuring at the same time.
