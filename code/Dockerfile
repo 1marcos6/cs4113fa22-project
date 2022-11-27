@@ -41,4 +41,4 @@ EXPOSE 50050-50100
 ENV PYTHONUNBUFFERED=1
 
 # Run the node
-CMD ["python3", "node.py", "30"] # 5 is the number of rows and columns in the gameboard
+CMD ["python3", "node.py", "15"] # 5 is the number of rows and columns in the gameboard

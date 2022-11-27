@@ -21,7 +21,7 @@ class space:
 class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
     def __init__(self):
         self.animals = ['🐕', '🐈', '🐁', '🐹', '🐰', '🐺', '🐸', '🐯', '🐨', '🐻', '🐷', '🐽', '🐮', '🐗', '🐵', '🐒', '🐴', '🐎', '🐫', '🐑', '🐘', '🐼', '🐍', '🐦', '🐤', '🐥', '🐣', '🐔', '🐧', '🐢', '🐛', '🐝', '🐜', '🐞', '🐌', '🐙', '🐠', '🐟', '🐳', '🐋', '🐬', '🐄', '🐏', '🐀', '🐃', '🐅', '🐇', '🐉', '🐐', '🐓', '🐕', '🐖', '🐁', '🐂', '🐲', '🐡', '🐡', '🐊', '🐪', '🐆', '🐈', '🐩', '🐾', '💐', '🌸', '🌷', '🍀', '🌹', '🌻', '🌺', '🌿', '🌾', '🍄', '🌵', '🌴', '🌲', '🌳', '🌰', '🌱', '🌼', '🌐', '🌞', '🌝', '🌚', '🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘', '🌙', '🌜', '🌛', '🌔', '🌍', '🌎', '🌏', '🌋', '🌌', ' ⛅️', '🐙', '🚢', '🐿']
-        self.people = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","💀","☠️","👻","👽","👾","🤖","💩","😺","😸","😹","😻","😼","😽","🙀","😿","😾"]
+        self.people = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","💀","👻","👽","👾","🤖","💩","😺","😸","😹","😻","😼","😽","🙀","😿","😾"]
         self.pokecount = 0
         self.peoplecount = 0
         self.board = [] * (n*n)
@@ -87,12 +87,97 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
 
 
     def MoveRequest(self, request, context):
-        print('MoveRequest')
-        return pokemon_ou_pb2.MoveRequestMessage()
-
+        if(request.type == 'poke'):
+            if(len(self.board[request.move].pokemon) == 0):
+                self.boardLocks[request.move].acquire()
+                self.board[request.move].pokemon.append(request.name)
+                self.board[request.curr].pokemon.remove(request.name)
+                self.boardLocks[request.move].release()
+                return pokemon_ou_pb2.Feedback(status = "yes")
+            else:
+                return pokemon_ou_pb2.Feedback(status = "no")
+        else:
+            if(self.board[request.move].trainer == None):
+                self.boardLocks[request.move].acquire()
+                self.board[request.move].trainer = request.name
+                self.board[request.curr].trainer = None
+                self.boardLocks[request.move].release()
+                return pokemon_ou_pb2.Feedback(status = "yes")
+            else:
+                return pokemon_ou_pb2.Feedback(status = "no")
     def BoardCheck(self, request, context):
-        print('BoardCheck')
-        return pokemon_ou_pb2.PossibleMoves()
+        possibleMoves =[]
+        if(request.type == 'poke'):
+            x = request.location
+            if(0<x-(n+1)<len(self.board) and len(self.board[x-(n+1)].pokemon) ==0 and self.board[x-(n+1)].trainer == None):
+                possibleMoves.append(x-(n+1))
+            if(0<x-(n)<len(self.board) and len(self.board[x-(n)].pokemon) ==0 and self.board[x-(n)].trainer == None):
+                possibleMoves.append(x-(n))
+            if(0<x-(n-1)<len(self.board) and len(self.board[x-(n-1)].pokemon) ==0 and self.board[x-(n-1)].trainer == None):
+                possibleMoves.append(x-(n-1))
+            if(0<x-1<len(self.board) and len(self.board[x-1].pokemon) ==0 and self.board[x-1].trainer == None):
+                possibleMoves.append(x-1)
+            if(0<x+1<len(self.board) and len(self.board[x+1].pokemon) ==0 and self.board[x+1].trainer == None):
+                possibleMoves.append(x+1)
+            if(0<x+(n-1)<len(self.board) and len(self.board[x+(n-1)].pokemon) ==0 and self.board[x+(n-1)].trainer == None):
+                possibleMoves.append(x+(n-1))
+            if(0<x+n<len(self.board) and len(self.board[x+(n)].pokemon) ==0 and self.board[x+(n)].trainer == None):
+                possibleMoves.append(x+(n))
+            if(0<x+(n+1)<len(self.board) and len(self.board[x+(n+1)].pokemon) ==0 and self.board[x+(n+1)].trainer == None):
+                possibleMoves.append(x+(n+1))
+
+        else:
+            x = request.location
+            if(0<x-(n)<len(self.board) and self.board[x-(n)].trainer == None):
+                if(len(self.board[x-(n)].pokemon) > 0):
+                    #insert at beginning of list
+                    possibleMoves.insert(0,x-(n))
+                else:
+                    possibleMoves.append(x-(n))
+            if(len(self.board[x-(n+1)].pokemon) > 0):
+                    #insert at beginning of list
+                    possibleMoves.insert(0,x-(n+1))
+            else:
+                    possibleMoves.append(x-(n+1))
+            if(0<x-1<len(self.board) and self.board[x-1].trainer == None):
+                if(len(self.board[x-1].pokemon) > 0):
+                    #insert at beginning of list
+                    possibleMoves.insert(0,x-1)
+                else:
+                    possibleMoves.append(x-1)
+            if(0<x+1<len(self.board) and self.board[x+1].trainer == None):
+                if(len(self.board[x+1].pokemon) > 0):
+                    #insert at beginning of list
+                    possibleMoves.insert(0,x+1)
+                else:
+                    possibleMoves.append(x+1)
+            if(0<x+(n-1)<len(self.board) and self.board[x+(n-1)].trainer == None):
+                if(len(self.board[x+(n-1)].pokemon) > 0):
+                    #insert at beginning of list
+                    possibleMoves.insert(0,x+(n-1))
+                else:
+                    possibleMoves.append(x+(n-1))
+            if(0<x+n<len(self.board)  and self.board[x+(n)].trainer == None):
+                if(len(self.board[x+(n)].pokemon) > 0):
+                    #insert at beginning of list
+                    possibleMoves.insert(0,x+(n))
+                else:
+                    possibleMoves.append(x+(n))
+
+            if(0<x-(n-1)<len(self.board) and self.board[x-(n-1)].trainer == None):
+                if(len(self.board[x-(n-1)].pokemon) > 0):
+                    #insert at beginning of list
+                    possibleMoves.insert(0,x-(n-1))
+                else:
+                    possibleMoves.append(x-(n-1))
+                    
+            if(0<x+(n+1)<len(self.board)  and self.board[x+(n+1)].trainer == None):
+                if(len(self.board[x+(n+1)].pokemon) > 0):
+                    #insert at beginning of list
+                    possibleMoves.insert(0,x+(n+1))
+                else:
+                    possibleMoves.append(x+(n+1))
+        return pokemon_ou_pb2.PossibleMoves(moves = possibleMoves)
 
     def print(self):
         output = ""

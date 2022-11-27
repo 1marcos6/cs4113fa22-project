@@ -26,13 +26,17 @@ message ConnectMessage {
     string type = 1;
 }
 message MoveRequestMessage {
-    string move = 1;
+    string type = 1;
+    int32 move = 2;
+    int32 curr = 3;
+    string name = 4;
 }
 message Feedback {
     string status = 1;
 }
 message CurrentLocation {
-    int32 location = 1;
+    string type = 1;
+    int32 location = 2;
 }
 message PossibleMoves {
     repeated int32 moves = 1;
