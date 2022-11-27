@@ -26,6 +26,7 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         self.peoplecount = 0
         self.board = [] * (n*n)
         self.boardLocks = [] * (n*n)
+        self.gameover = 'no'
         for i in range(n*n):
             self.board.append(space())
         for i in range(n*n):
@@ -41,6 +42,8 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
                     returned.append(pokemon)
                     self.board[request.pos].pokemon.remove(pokemon)
                     self.pokecount-=1
+                    if(self.pokecount==0):
+                        self.pokecount = -1
             self.boardLocks[request.pos].release()
         return pokemon_ou_pb2.CapturedMessage(names = returned)
 
@@ -51,6 +54,9 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
     def Board(self, request, context):
         self.print()  
         return pokemon_ou_pb2.Empty()
+
+    def isGameOver(self, request, context):
+        return pokemon_ou_pb2.Feedback(status = self.gameover)
 
 
     def Connect(self, request, context):
@@ -122,6 +128,7 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
                 return pokemon_ou_pb2.Feedback(status = "no")
     def BoardCheck(self, request, context):
         possibleMoves =[]
+        starMoves =[]
         if(request.type == 'poke'):
             x = request.location
             if(0<x-(n+1)<len(self.board) and len(self.board[x-(n+1)].pokemon) ==0 and self.board[x-(n+1)].trainer == None):
@@ -144,38 +151,38 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         else:
             x = request.location
             if(0<x+1<len(self.board) and len(self.board[x+1].pokemon) >0 and self.board[x+1].trainer == None):
-                possibleMoves.insert(0,x+1)
+                starMoves.append(x+1)
             elif (0<x+1<len(self.board) and self.board[x+1].trainer == None):
                 possibleMoves.append(x+1)
             if(0<x+n<len(self.board) and len(self.board[x+(n)].pokemon) >0 and self.board[x+(n)].trainer == None):
-                possibleMoves.insert(0,x+(n))
+                starMoves.append(x+(n))
             elif (0<x+n<len(self.board) and self.board[x+(n)].trainer == None):
                 possibleMoves.append(x+(n))
             if(0<x-(n)<len(self.board) and len(self.board[x-(n)].pokemon) > 0 and self.board[x-(n)].trainer == None):
-                possibleMoves.insert(0,x-(n))
+                starMoves.append(x-(n))
             elif (0<x-(n)<len(self.board) and self.board[x-(n)].trainer == None):
                 possibleMoves.append(x-(n))
             if(0<x+(n+1)<len(self.board) and len(self.board[x+(n+1)].pokemon) >0 and self.board[x+(n+1)].trainer == None):
-                possibleMoves.insert(0,x+(n+1))
+                starMoves.append(x+(n+1))
             elif (0<x+(n+1)<len(self.board) and self.board[x+(n+1)].trainer == None):
                 possibleMoves.append(x+(n+1))
             if(0<x-(n-1)<len(self.board) and len(self.board[x-(n-1)].pokemon) >00 and self.board[x-(n-1)].trainer == None):
-                possibleMoves.insert(0,x-(n-1))
+                starMoves.append(x-(n-1))
             elif (0<x-(n-1)<len(self.board) and self.board[x-(n-1)].trainer == None):
                 possibleMoves.append(x-(n-1))
             if(0<x-1<len(self.board) and len(self.board[x-1].pokemon) >0 and self.board[x-1].trainer == None):
-                possibleMoves.insert(0,x-1)
+               starMoves.append(x-1)
             elif (0<x-1<len(self.board) and self.board[x-1].trainer == None):
                 possibleMoves.append(x-1)
             if(0<x+(n-1)<len(self.board) and len(self.board[x+(n-1)].pokemon) >0 and self.board[x+(n-1)].trainer == None):
-                possibleMoves.insert(0,x+(n-1))
+                starMoves.append(x+(n-1))
             elif (0<x+(n-1)<len(self.board) and self.board[x+(n-1)].trainer == None):
                 possibleMoves.append(x+(n-1))
             if(0<x-(n+1)<len(self.board) and len(self.board[x-(n+1)].pokemon) > 0 and self.board[x-(n+1)].trainer == None):
-                possibleMoves.insert(0,x-(n+1))
+                starMoves.append(x-(n+1))
             elif (0<x-(n+1)<len(self.board) and self.board[x-(n+1)].trainer == None):
                 possibleMoves.append(x-(n+1))
-        return pokemon_ou_pb2.PossibleMoves(moves = possibleMoves)
+        return pokemon_ou_pb2.PossibleMoves(moves = possibleMoves, starmoves = starMoves)
 
     def print(self):
         output = ""
@@ -217,6 +224,13 @@ def server():
         while True:
             print('\033[H')
             servicer.print()
+            if(servicer.pokecount == -1):
+                print('\033[H\033[J')
+                servicer.gameover = 'yes'
+                time.sleep(10)
+                print("GAME OVER")
+                break
+            
             #time.sleep(86400)
               
     except KeyboardInterrupt:

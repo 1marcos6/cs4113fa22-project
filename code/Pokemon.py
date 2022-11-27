@@ -32,6 +32,12 @@ class Pokemon:
                     moveResponse = stub.MoveRequest(pokemon_ou_pb2.MoveRequestMessage(type = 'poke', name = self.name, move = move, curr = self.path[-1]))
                     if moveResponse.status == 'yes':
                         self.path.append(move)
-                    if moveResponse.status == 'captured':
+                    if moveResponse.status == 'Captured':
                         caught = 1
                 time.sleep(2)
+            res = stub.isGameOver(pokemon_ou_pb2.Empty())
+            while(res.status == 'no'):
+                time.sleep(2)
+                res = stub.isGameOver(pokemon_ou_pb2.Empty())
+            #silent disconnect from server
+

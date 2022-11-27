@@ -9,6 +9,7 @@ service gameserver {
     rpc Connect(ConnectMessage) returns (ConnectResponse){}
     rpc MoveRequest(MoveRequestMessage) returns (Feedback){}
     rpc BoardCheck(CurrentLocation) returns (PossibleMoves){}
+    rpc isGameOver(Empty) returns (Feedback){}
 }
 
 
@@ -45,6 +46,7 @@ message CurrentLocation {
 }
 message PossibleMoves {
     repeated int32 moves = 1;
+    repeated int32 starmoves = 2;
 }
 message ConnectResponse {
     string status = 1;
