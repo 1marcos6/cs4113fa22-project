@@ -1,3 +1,14 @@
+## TODO
+* Pokemon and Trainers are circularly moving around the map (on a 10x10 board, node can move from 1d idx 9 to 1d idx 10) This shouldn't be possible and is only possible now because of the use of the 1d array format to store the 2d board.
+
+* Print each trainers Pokedex on game end.
+
+* Print all move records on game end.
+
+* Remove trainers on game end.
+
+* Remove pokemon on game end
+
 ## Development Schedule
 
 I plan to use my weekends from now until the due date, 12/01, to complete this project. Specifically Saturdays and Sundays.
