@@ -3,7 +3,7 @@ syntax = "proto3";
 package pokemon_ou;
 
 service gameserver {
-    rpc Captured(Empty) returns (CapturedMessage){}
+    rpc Capture(CaptureReq) returns (CapturedMessage){}
     rpc Moves(Empty) returns (MovesRecord){}
     rpc Board(Empty) returns (Empty){}
     rpc Connect(ConnectMessage) returns (ConnectResponse){}
@@ -14,8 +14,13 @@ service gameserver {
 
 
 message Empty {}
+
+message CaptureReq {
+    int32 pos = 1;
+}
+
 message CapturedMessage {
-    string status = 1;
+    repeated string names = 1;
 }
 
 message MovesRecord {

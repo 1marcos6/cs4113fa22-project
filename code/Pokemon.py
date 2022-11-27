@@ -26,9 +26,12 @@ class Pokemon:
                 #print(res.moves)
                 if(len(res.moves) > 0):
                     #get random element from moves array
+                    #print(res.moves)
                     move = int(res.moves[random.randint(0,len(res.moves)-1)])
                     #move to that location
                     moveResponse = stub.MoveRequest(pokemon_ou_pb2.MoveRequestMessage(type = 'poke', name = self.name, move = move, curr = self.path[-1]))
                     if moveResponse.status == 'yes':
                         self.path.append(move)
+                    if moveResponse.status == 'captured':
+                        caught = 1
                 time.sleep(2)
