@@ -3,7 +3,7 @@
 
 * Print all move records on game end.
 
-* Add star moves to Pokemon move selection; a starmove is a move to a square with no pokemon on it. A move to a square with pokemon is valid but undesirable.
+* Add star moves to Pokemon move selection; a starmove is a move to a square with no pokemon on it. A move to a square with pokemon is valid but undesirable. [ADDED]
 
 ## Development Schedule
 
