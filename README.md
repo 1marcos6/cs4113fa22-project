@@ -1,5 +1,5 @@
 ## TODO
-* Pokemon and Trainers are circularly moving around the map (on a 10x10 board, node can move from 1d idx 9 to 1d idx 10) This shouldn't be possible and is only possible now because of the use of the 1d array format to store the 2d board.
+* Pokemon and Trainers are circularly moving around the map (on a 10x10 board, node can move from 1d idx 9 to 1d idx 10) This shouldn't be possible and is only possible now because of the use of the 1d array format to store the 2d board. [FIXED]
 
 * Print all move records on game end.
 
