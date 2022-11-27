@@ -1,13 +1,9 @@
 ## TODO
 * Pokemon and Trainers are circularly moving around the map (on a 10x10 board, node can move from 1d idx 9 to 1d idx 10) This shouldn't be possible and is only possible now because of the use of the 1d array format to store the 2d board.
 
-* Print each trainers Pokedex on game end.
-
 * Print all move records on game end.
 
-* Remove trainers on game end.
-
-* Remove pokemon on game end
+* Add star moves to Pokemon move selection; a starmove is a move to a square with no pokemon on it. A move to a square with pokemon is valid but undesirable.
 
 ## Development Schedule
 
