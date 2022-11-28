@@ -4,12 +4,12 @@ package pokemon_ou;
 
 service gameserver {
     rpc Capture(CaptureReq) returns (CapturedMessage){}
-    rpc Moves(Empty) returns (MovesRecord){}
     rpc Board(Empty) returns (Empty){}
     rpc Connect(ConnectMessage) returns (ConnectResponse){}
     rpc MoveRequest(MoveRequestMessage) returns (Feedback){}
     rpc BoardCheck(CurrentLocation) returns (PossibleMoves){}
     rpc isGameOver(Empty) returns (Feedback){}
+    rpc passPath(Path) returns (Empty){}
 }
 
 
@@ -51,4 +51,9 @@ message PossibleMoves {
 message ConnectResponse {
     string status = 1;
     int32 pos = 2;
+}
+
+message Path {
+    repeated int32 path = 1;
+    string name = 2;
 }

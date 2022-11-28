@@ -19,7 +19,7 @@ class Pokemon:
             self.path.append(res.pos)
 
             caught = 0
-            time.sleep(10)
+            time.sleep(8)
             while(caught!=1):
                #check board
                 res = stub.BoardCheck(pokemon_ou_pb2.CurrentLocation(type = 'poke', location = self.path[-1]))
@@ -43,4 +43,5 @@ class Pokemon:
                 time.sleep(2)
                 res = stub.isGameOver(pokemon_ou_pb2.Empty())
             #silent disconnect from server
+            stub.passPath(pokemon_ou_pb2.Path(path = self.path,name = self.name))
 

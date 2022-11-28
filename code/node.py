@@ -11,7 +11,6 @@ from Pokemon import Pokemon
 from Trainer import Trainer
 import threading
 
-
 class space:
     def __init__(self):
         self.occupied = False
@@ -27,6 +26,7 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         self.board = [] * (n*n)
         self.boardLocks = [] * (n*n)
         self.gameover = 'no'
+        self.pathRec = ''
         for i in range(n*n):
             self.board.append(space())
         for i in range(n*n):
@@ -47,16 +47,16 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
             self.boardLocks[request.pos].release()
         return pokemon_ou_pb2.CapturedMessage(names = returned)
 
-    def Moves(self, request, context):
-        print('Moves')
-        return pokemon_ou_pb2.MovesRecord()
-
     def Board(self, request, context):
         self.print()  
         return pokemon_ou_pb2.Empty()
 
     def isGameOver(self, request, context):
         return pokemon_ou_pb2.Feedback(status = self.gameover)
+    
+    def passPath(self, request, context):
+        self.pathRec+= request.name + ' ' + str(request.path) + '\n'
+        return pokemon_ou_pb2.Empty()
 
 
     def Connect(self, request, context):
@@ -250,6 +250,10 @@ def server():
                 print('\033[H\033[J')
                 servicer.gameover = 'yes'
                 time.sleep(10)
+                f = open("path.txt", "w")
+                f.write(servicer.pathRec)
+                f.close()
+               # print(os.getcwd())
                 print("GAME OVER")
                 break
             
