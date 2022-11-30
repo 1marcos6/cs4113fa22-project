@@ -27,6 +27,7 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         self.boardLocks = [] * (n*n)
         self.gameover = 'no'
         self.pathRec = ''
+        self.pokedexRec = ''
         for i in range(n*n):
             self.board.append(space())
         for i in range(n*n):
@@ -54,8 +55,10 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
     def isGameOver(self, request, context):
         return pokemon_ou_pb2.Feedback(status = self.gameover)
     
-    def passPath(self, request, context):
+    def passInfo(self, request, context):
         self.pathRec+= request.name + ' ' + str(request.path) + '\n'
+        if(request.dex != []):
+            self.pokedexRec+= request.name + ' ' + str(request.dex) + '\n'
         return pokemon_ou_pb2.Empty()
 
 
@@ -249,11 +252,13 @@ def server():
             if(servicer.pokecount == -1):
                 print('\033[H\033[J')
                 servicer.gameover = 'yes'
-                time.sleep(10)
-                f = open("path.txt", "w")
+                time.sleep(5)
+                f = open("/log/path.txt", "w")
                 f.write(servicer.pathRec)
                 f.close()
-               # print(os.getcwd())
+                f = open("/log/pokedex.txt","w")
+                f.write(servicer.pokedexRec)
+                f.close()
                 print("GAME OVER")
                 break
             

@@ -43,5 +43,5 @@ class Pokemon:
                 time.sleep(2)
                 res = stub.isGameOver(pokemon_ou_pb2.Empty())
             #silent disconnect from server
-            stub.passPath(pokemon_ou_pb2.Path(path = self.path,name = self.name))
+            stub.passInfo(pokemon_ou_pb2.Info(path = self.path,name = self.name, dex = []))
 

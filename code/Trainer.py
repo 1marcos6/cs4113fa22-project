@@ -44,7 +44,7 @@ class Trainer:
 
 
                 gameOver = stub.isGameOver(pokemon_ou_pb2.Empty()).status
-            stub.passPath(pokemon_ou_pb2.Path(path = self.path,name = self.name))
+            stub.passInfo(pokemon_ou_pb2.Info(path = self.path,name = self.name, dex = self.pokedex))
             time.sleep(1.1)
-            print(self.name + ":I caught all of these: " + str(self.pokedex))
+            #print(self.name + ":I caught all of these: " + str(self.pokedex))
             #stub.passPath(pokemon_ou_pb2.Path(path = self.path,name = self.name))
