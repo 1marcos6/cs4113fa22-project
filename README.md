@@ -3,6 +3,20 @@
 Program that creates instances of Pokemon, Trainers, and a singular Server to facilitate a pseudo-game in the image of the popular video game franchise Pokemon. Trainers and Pokemon populate an NxN map, and the Trainers subsequently try to capture the Pokemon, while the Pokemon try to run away from capturing Trainers. All of these moves are performed asynchronously, and the program is able to avoid conflicts by using threading locks; when an action is being performed on a space, that space is momentarily locked from being used by any other nodes while the current node is modifying it. This allows the safe execution of initial space assignment, moving, and Pokemon capturing. Capturing is also asynchronous-Trainers strive to move to a square occupied by a Pokemon, and if it identifies it has moved to an occupied square, it will request a capture - however, in the time between the move execution and the capture request, the Pokemon may have also moved away, so captures can frequently fail. Once a capture request goes through to the server, however, Pokemon are locked to the space until the capture is complete. They are then subsequently removed from the playing field.
 
 
+## How to Run
+
+* Number of Pokemon and Trainers Required = 22 
+
+To run this program, you can use the docker-compose file provided. This will create a server, 22 trainers, and 22 pokemon. To run the program, simply run the following command:
+
+```
+docker-compose up --scale pokemon=22 --scale trainer=22
+```
+
+The --scale flag allows you to specify the number of pokemon and trainers you want to create. The default is 22, but you can change it to any number you want.
+
+To specify the NxN size of the map, you can change the value of the environment variable MAP_SIZE in the docker-compose file. The default is 20, but you can change it to any number you want (granted all nodes can fit on the board!)
+
 ## Final Version
 
 

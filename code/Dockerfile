@@ -39,6 +39,7 @@ EXPOSE 50050-50100
 
 # Unbuffer to see logs with docker logs <containername>
 ENV PYTHONUNBUFFERED=1
+ENV MAP_SIZE=30
 
-# Run the node
-CMD ["python3", "node.py", "30"] # 5 is the number of rows and columns in the gameboard
+# Run the node and pass MAP_SIZE as an environment variable
+CMD python3 node.py $MAP_SIZE

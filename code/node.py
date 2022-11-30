@@ -56,7 +56,7 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
     def passInfo(self, request, context):
         self.pathRec+= request.name + ' ' + str(request.path) + '\n'
         if(request.dex != []):
-            self.pokedexRec+= request.name + ' ' + str(request.dex) + '\n'
+            self.pokedexRec+= request.name + ': ' + str(request.dex) + '\n'
         return pokemon_ou_pb2.Empty()
 
 
