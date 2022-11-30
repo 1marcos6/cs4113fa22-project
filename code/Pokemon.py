@@ -21,9 +21,7 @@ class Pokemon:
             caught = 0
             time.sleep(8)
             while(caught!=1):
-               #check board
                 res = stub.BoardCheck(pokemon_ou_pb2.CurrentLocation(type = 'poke', location = self.path[-1]))
-                #print(res.moves)
                 if (len(res.starmoves) > 0):
                     move = int(res.starmoves[random.randint(0,len(res.starmoves)-1)])
                 elif(len(res.moves) > 0):
@@ -36,12 +34,9 @@ class Pokemon:
                 if moveResponse.status == 'Captured':
                         caught = 1
 
-
-
             res = stub.isGameOver(pokemon_ou_pb2.Empty())
             while(res.status == 'no'):
                 time.sleep(2)
                 res = stub.isGameOver(pokemon_ou_pb2.Empty())
-            #silent disconnect from server
             stub.passInfo(pokemon_ou_pb2.Info(path = self.path,name = self.name, dex = []))
 

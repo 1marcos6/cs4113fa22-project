@@ -6,14 +6,12 @@ import grpc
 import random
 import sys
 import concurrent.futures
-import sys
 from Pokemon import Pokemon
 from Trainer import Trainer
 import threading
 
 class space:
     def __init__(self):
-        self.occupied = False
         self.pokemon = [] 
         self.trainer = None
 
@@ -28,13 +26,13 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
         self.gameover = 'no'
         self.pathRec = ''
         self.pokedexRec = ''
+
         for i in range(n*n):
             self.board.append(space())
         for i in range(n*n):
             self.boardLocks.append(threading.Lock())
             
     def Capture(self, request, context):
-        #self.boardLocks[request.pos].acquire()
         returned = []
         if(len(self.board[request.pos].pokemon)>0):
             self.boardLocks[request.pos].acquire()
@@ -64,7 +62,6 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
 
     def Connect(self, request, context):
         if(request.type == 'poke'):
-            #time.sleep(1)
             self.pokecount += 1
             name = self.animals[self.pokecount-1]
             x = random.randint(0,(n*n)-1)
@@ -84,7 +81,6 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
             self.boardLocks[x].release()
             return pokemon_ou_pb2.ConnectResponse(status = name, pos = x)
         else:
-            #time.sleep(.5)
             self.peoplecount += 1
             name = self.people[self.peoplecount-1]
             x = random.randint(0,(n*n)-1)
@@ -121,7 +117,6 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer):
                 return pokemon_ou_pb2.Feedback(status = "no")
         else:
             if(self.board[request.move].trainer == None):
-                #print("The current position is " + str(request.curr) + " and the move is " + str(request.move))
                 self.boardLocks[request.move].acquire()
                 self.boardLocks[request.curr].acquire()
                 self.board[request.move].trainer = request.name
@@ -259,10 +254,11 @@ def server():
                 f = open("/log/pokedex.txt","w")
                 f.write(servicer.pokedexRec)
                 f.close()
+                print("Full game move history saved to ./path.txt")
+                print("Full game pokedex saved to ./pokedex.txt")
                 print("GAME OVER")
                 break
             
-            #time.sleep(86400)
               
     except KeyboardInterrupt:
         server.stop(0)
