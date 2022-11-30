@@ -15,7 +15,9 @@ docker-compose up --scale pokemon=22 --scale trainer=22
 
 The --scale flag allows you to specify the number of pokemon and trainers you want to create. The default is 22, but you can change it to any number you want.
 
-To specify the NxN size of the map, you can change the value of the environment variable MAP_SIZE in the docker-compose file. The default is 20, but you can change it to any number you want (granted all nodes can fit on the board!)
+To specify the NxN size of the map, you can change the value of the environment variable MAP_SIZE in the Dockerfile file. The default is 20, but you can change it to any number you want (granted all nodes can fit on the board!)
+
+From here, the game will execurte itself. All nodes will be created and assigned a space, and Pokemon nodes will get a small head start before the Trainers begin moving. The game will continue until all Pokemon are captured. Once all Pokemon are captured, the game will end and the server will print out the full move history of all nodes to ./path.txt and the final Pokedexes of all Trainers to ./pokedex.txt.
 
 ## Final Version
 
