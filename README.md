@@ -20,7 +20,7 @@ To specify the NxN size of the map, you can change the value of the environment 
 From here, the game will execurte itself. All nodes will be created and assigned a space, and Pokemon nodes will get a small head start before the Trainers begin moving. The game will continue until all Pokemon are captured. Once all Pokemon are captured, the game will end and the server will print out the full move history of all nodes to ./path.txt and the final Pokedexes of all Trainers to ./pokedex.txt.
 
 ## Final Version
-
+![Gif](./media/Final.gif)
 
 
 

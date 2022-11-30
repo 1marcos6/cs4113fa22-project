@@ -229,7 +229,7 @@ class gameserver(pokemon_ou_pb2_grpc.gameserverServicer): # The server class, wh
 
 
 def server():
-    server = grpc.server(concurrent.futures.ThreadPoolExecutor(max_workers=10)) # Create a server with 10 threads
+    server = grpc.server(concurrent.futures.ThreadPoolExecutor(max_workers=20)) # Create a server with 10 threads
     servicer = gameserver() # Create a new instance of the gameserver class
     pokemon_ou_pb2_grpc.add_gameserverServicer_to_server(servicer, server) # Add the servicer to the server
     server.add_insecure_port('[::]:50051') # Add the port to the server
