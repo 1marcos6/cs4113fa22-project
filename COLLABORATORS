@@ -1,3 +1,7 @@
-https://karthi-net.medium.com/how-to-scale-services-using-docker-compose-31d7b83a6648
+https://karthi-net.medium.com/how-to-scale-services-using-docker-compose-31d7b83a6648 #Helped me understand how to scale the amount of nodes connecting to a server instance (how to have a scalable way to insert more than one of each node)
 
-unfinished 
+Ethan Ho, ethanho@ou.edu # Helped with print statements that make the program appear to be constantly updating instead of using static print statements
+
+https://docs.docker.com/compose/environment-variables/ # Helped me understand how to use environment variables in docker-compose relating to the size of the board, N
+
+https://vsupalov.com/docker-arg-env-variable-guide/ # Further help with understanding environment variables in docker-compose and how to pass them to the command line running the python script
