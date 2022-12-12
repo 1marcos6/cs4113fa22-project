@@ -2,6 +2,28 @@
 
 Program that creates instances of Pokemon, Trainers, and a singular Server to facilitate a pseudo-game in the image of the popular video game franchise Pokemon. Trainers and Pokemon populate an NxN map, and the Trainers subsequently try to capture the Pokemon, while the Pokemon try to run away from capturing Trainers. All of these moves are performed asynchronously, and the program is able to avoid conflicts by using threading locks; when an action is being performed on a space, that space is momentarily locked from being used by any other nodes while the current node is modifying it. This allows the safe execution of initial space assignment, moving, and Pokemon capturing. Capturing is also asynchronous-Trainers strive to move to a square occupied by a Pokemon, and if it identifies it has moved to an occupied square, it will request a capture - however, in the time between the move execution and the capture request, the Pokemon may have also moved away, so captures can frequently fail. Once a capture request goes through to the server, however, Pokemon are locked to the space until the capture is complete. They are then subsequently removed from the playing field.
 
+## Code
+
+This program consists of 3 script files, those being Pokemon.py, node.py, and Trainer.py.
+
+* Pokemon.py - This script runs all of the logic related to the Pokemon entities. It consists of moving logic related to moving away from trainers on the map.
+
+* Trainer.py - This script runs all of the logic related to the Trainer entities. It consists of moving logic related to moving towards Pokemon on the map, as well as logic related to the capture of Pokemon.
+
+* node.py - This script runs all of the logic related to the Server entity. It consists of the gRPC server, as well as the path provided to client nodes to launch the Pokemon.py or Trainer.py scripts.
+
+Additionally, the program contains two files related to the Docker service, those being Dockerfile and docker-compose.yml.
+
+* Dockerfile - This file contains the instructions for building the Docker image. It is based on the Ubuntu 18.04 image, and installs the necessary dependencies for the program to run including Python 3.6, pip, and the gRPC Python library.
+
+* docker-compose.yml - This file contains the instructions for running the Docker image. It contains the instructions for building the image, as well as the instructions for running the image. It defines the unique node qualifications of Trainer, Pokemon, and Server, and also defines the ports that the nodes will be exposed on.
+
+Then, we have a file called requirements.txt, which would contain the dependencies for the program to run. This file is used by the Dockerfile to install the necessary dependencies. There are none included in this program.
+
+Finally, we have a file named pokemon_ou.proto, which contains the protocol buffer definitions for the program. This file is used by the gRPC server to define the methods that the client nodes can call, and the parameters that they can pass to those methods. The program defines one unique service, the gameserver service.
+
+
+
 
 ## How to Run
 
