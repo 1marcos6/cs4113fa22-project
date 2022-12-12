@@ -23,8 +23,6 @@ Then, we have a file called requirements.txt, which would contain the dependenci
 Finally, we have a file named pokemon_ou.proto, which contains the protocol buffer definitions for the program. This file is used by the gRPC server to define the methods that the client nodes can call, and the parameters that they can pass to those methods. The program defines one unique service, the gameserver service.
 
 
-
-
 ## How to Run
 
 * Number of Pokemon and Trainers Required = 22 
@@ -40,6 +38,12 @@ The --scale flag allows you to specify the number of pokemon and trainers you wa
 To specify the NxN size of the map, you can change the value of the environment variable MAP_SIZE in the Dockerfile file. The default is 20, but you can change it to any number you want (granted all nodes can fit on the board!)
 
 From here, the game will execurte itself. All nodes will be created and assigned a space, and Pokemon nodes will get a small head start before the Trainers begin moving. The game will continue until all Pokemon are captured. Once all Pokemon are captured, the game will end and the server will print out the full move history of all nodes to ./path.txt and the final Pokedexes of all Trainers to ./pokedex.txt.
+
+## Testing and Debugging
+
+Testing and debugging was important in the pursuit of a finished product for this project. To actually achieve the ability of testing the working parts of the project, I created the visual representation of the board before developing any behaviors of the connected entities. This in turn allowed me to test the most important distributed aspect of the project - which would be the free and asynchronous movement of all of the connected nodes. I initially used timing delays to simulate an asynchronous movement, but I quickly found out that with enough entities connected to the server, the safety net these timing delays created was not adequete. Subsequently, I discovered the usage of locks, which allowed me to safely move all of the nodes without the need for timing delays. This was a crucial discovery, as it allowed me to move forward with the development of the project. 
+
+
 
 ## Final Version
 ![Gif](./media/Final.gif)
